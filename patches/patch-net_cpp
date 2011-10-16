@@ -1,0 +1,33 @@
+$OpenBSD$
+--- net.cpp.orig	Mon May 23 15:08:40 2011
++++ net.cpp	Mon May 23 15:18:28 2011
+@@ -11,6 +11,11 @@
+ #include <miniupnpc/upnperrors.h>
+ #endif
+ 
++#ifdef __OpenBSD__
++#define MSG_NOSIGNAL 0
++#endif
++
++
+ static const int MAX_OUTBOUND_CONNECTIONS = 8;
+ 
+ void ThreadMessageHandler2(void* parg);
+@@ -75,7 +80,7 @@ bool ConnectSocket(const CAddress& addrConnect, SOCKET
+     SOCKET hSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+     if (hSocket == INVALID_SOCKET)
+         return false;
+-#ifdef BSD
++#ifdef __FreeBSD__
+     int set = 1;
+     setsockopt(hSocket, SOL_SOCKET, SO_NOSIGPIPE, (void*)&set, sizeof(int));
+ #endif
+@@ -1392,7 +1397,7 @@ bool BindListenPort(string& strError)
+         return false;
+     }
+ 
+-#ifdef BSD
++#ifdef __FreeBSD__
+     // Different way of disabling SIGPIPE on BSD
+     setsockopt(hListenSocket, SOL_SOCKET, SO_NOSIGPIPE, (void*)&nOne, sizeof(int));
+ #endif

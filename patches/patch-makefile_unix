@@ -1,6 +1,14 @@
 $OpenBSD$
 --- makefile.unix.orig	Thu Apr 21 00:08:01 2011
 +++ makefile.unix	Mon May 23 15:35:11 2011
+@@ -8,7 +8,6 @@ WXINCLUDEPATHS=$(shell wx-config --cxxflags)
+ 
+ WXLIBS=$(shell wx-config --libs)
+ 
+-USE_UPNP:=0
+ 
+ DEFS=-DNOPCH -DUSE_SSL
+ 
 @@ -15,13 +15,16 @@ DEFS=-DNOPCH -DFOURWAYSSE2 -DUSE_SSL
  # for boost 1.37, add -mt to the boost libraries
  LIBS= \
@@ -23,27 +31,18 @@ $OpenBSD$
  
  ifdef USE_UPNP
  	LIBS += -l miniupnpc
-@@ -31,12 +34,11 @@ endif
+@@ -31,12 +34,11 @@
  LIBS+= \
   -Wl,-Bdynamic \
     -l gthread-2.0 \
--   -l z \
--   -l dl
-+   -l z
+    -l z \
+-   -l dl \
+    -l pthread
  
  
  DEBUGFLAGS=-g -D__WXDEBUG__
 -CXXFLAGS=-O2 -Wno-invalid-offsetof -Wformat $(DEBUGFLAGS) $(DEFS)
 +CXXFLAGS=-O2 -Wno-invalid-offsetof -Wformat $(DEBUGFLAGS) $(DEFS) -I$(PREFIX)/include -I$(PREFIX)/include/db4
- HEADERS=headers.h strlcpy.h serialize.h uint256.h util.h key.h bignum.h base58.h \
-     script.h db.h net.h irc.h main.h rpc.h uibase.h ui.h noui.h init.h
- 
-@@ -63,7 +65,7 @@ cryptopp/obj/%.o: cryptopp/%.cpp
- 	$(CXX) -c $(CXXFLAGS) -O3 -o $@ $<
- 
- obj/sha256.o: sha256.cpp
--	$(CXX) -c $(CXXFLAGS) -msse2 -O3 -march=amdfam10 -o $@ $<
-+	$(CXX) -c $(CXXFLAGS) -msse2 -O3 -o $@ $<
- 
- bitcoin: $(OBJS) obj/ui.o obj/uibase.o obj/sha256.o
- 	$(CXX) $(CXXFLAGS) -o $@ $^ $(WXLIBS) $(LIBS)
+ HEADERS = \
+     base58.h \
+     bignum.h \

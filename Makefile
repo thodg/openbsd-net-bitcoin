@@ -28,21 +28,23 @@ BUILD_DEPENDS =		databases/db/v4 \
 LIB_DEPENDS =		devel/glib2 \
 
 FLAVORS =		upnp
-FLAVOR =
+FLAVOR?=
+
+MAKE_FLAGS =		PREFIX=${PREFIX}
 
 .if ${FLAVOR:L:Mupnp}
 BUILD_DEPENDS +=	net/miniupnp
-MAKE_FLAGS =		USE_UPNP=1
+MAKE_FLAGS +=		USE_UPNP=1
 .endif
-
-USE_GMAKE =		Yes
 
 NO_REGRESS =		Yes
 
-MAKE_FILE =		makefile.unix
+MAKE_FILE =		makefile.openbsd
 WRKDIST =		${WRKDIR}/bitcoin-bitcoin-72274ed/src
 
-ALL_TARGET =		bitcoind
+pre-build:
+	-cd ${WRKSRC} && for F in *.cpp; do ln $$F $$(basename $$F .cpp).cc; done
+	-cd ${WRKSRC}/cryptopp && for F in *.cpp; do ln $$F $$(basename $$F .cpp).cc; done
 
 do-install:
 	${INSTALL_PROGRAM} ${WRKSRC}/bitcoind ${PREFIX}/bin

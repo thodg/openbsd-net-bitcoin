@@ -1,6 +1,23 @@
 --- makefile.unix.orig	Tue Jun 19 22:44:55 2012
-+++ makefile.unix	Thu Aug  9 18:45:00 2012
-@@ -82,7 +82,7 @@
++++ makefile.unix	Wed Sep  5 11:50:33 2012
+@@ -2,7 +2,7 @@
+ # Distributed under the MIT/X11 software license, see the accompanying
+ # file license.txt or http://www.opensource.org/licenses/mit-license.php.
+ 
+-USE_UPNP:=0
++#USE_UPNP:=0
+ 
+ DEFS=-DBOOST_SPIRIT_THREADSAFE
+ 
+@@ -44,7 +44,6 @@
+ LIBS+= \
+  -Wl,-B$(LMODE2) \
+    -l z \
+-   -l dl \
+    -l pthread
+ 
+ 
+@@ -82,7 +81,7 @@
  
  
  DEBUGFLAGS=-g

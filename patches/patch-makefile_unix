@@ -1,48 +1,11 @@
-$OpenBSD$
---- makefile.unix.orig	Thu Apr 21 00:08:01 2011
-+++ makefile.unix	Mon May 23 15:35:11 2011
-@@ -8,7 +8,6 @@ WXINCLUDEPATHS=$(shell wx-config --cxxflags)
- 
- WXLIBS=$(shell wx-config --libs)
- 
--USE_UPNP:=0
- 
- DEFS=-DNOPCH -DUSE_SSL
- 
-@@ -15,13 +15,16 @@ DEFS=-DNOPCH -DFOURWAYSSE2 -DUSE_SSL
- # for boost 1.37, add -mt to the boost libraries
- LIBS= \
-  -Wl,-Bstatic \
--   -l boost_system \
--   -l boost_filesystem \
--   -l boost_program_options \
--   -l boost_thread \
-+   -L$(PREFIX)/lib \
-+   -L$(PREFIX)/lib/db4 \
-+   -l boost_system-mt \
-+   -l boost_filesystem-mt \
-+   -l boost_program_options-mt \
-+   -l boost_thread-mt \
-    -l db_cxx \
-    -l ssl \
--   -l crypto
-+   -l crypto \
-+   -pthread
- 
- ifdef USE_UPNP
- 	LIBS += -l miniupnpc
-@@ -31,12 +34,11 @@
- LIBS+= \
-  -Wl,-Bdynamic \
-    -l gthread-2.0 \
-    -l z \
--   -l dl \
-    -l pthread
+--- makefile.unix.orig	Tue Jun 19 22:44:55 2012
++++ makefile.unix	Thu Aug  9 18:45:00 2012
+@@ -82,7 +82,7 @@
  
  
- DEBUGFLAGS=-g -D__WXDEBUG__
--CXXFLAGS=-O2 -Wno-invalid-offsetof -Wformat $(DEBUGFLAGS) $(DEFS)
-+CXXFLAGS=-O2 -Wno-invalid-offsetof -Wformat $(DEBUGFLAGS) $(DEFS) -I$(PREFIX)/include -I$(PREFIX)/include/db4
- HEADERS = \
-     base58.h \
-     bignum.h \
+ DEBUGFLAGS=-g
+-CXXFLAGS=-O2
++#CXXFLAGS=-O2
+ xCXXFLAGS=-pthread -Wall -Wextra -Wno-sign-compare -Wno-invalid-offsetof -Wno-unused-parameter -Wformat -Wformat-security \
+     $(DEBUGFLAGS) $(DEFS) $(HARDENING) $(CXXFLAGS)
+ 

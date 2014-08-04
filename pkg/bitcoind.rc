@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# $OpenBSD$
+
+daemon="${TRUEPREFIX}/bin/bitcoind"
+daemon_flags="-daemon"
+daemon_user="_bitcoin"
+
+. /etc/rc.d/rc.subr
+
+rc_reload=NO
+
+rc_cmd $1

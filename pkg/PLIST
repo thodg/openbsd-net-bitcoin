@@ -1,4 +1,14 @@
 @comment $OpenBSD$
+@newgroup _bitcoin:780
+@newuser _bitcoin:780:780:daemon:Bitcoin Account:/var/bitcoin:/sbin/nologin
 @bin bin/bitcoind
 @man man/man1/bitcoind.1
 @man man/man5/bitcoin.conf.5
+@rcscript ${RCDIR}/bitcoind
+@mode 750
+@owner _bitcoin
+@group _bitcoin
+@sample /var/bitcoin/
+@mode 700
+@sample /var/bitcoin/.bitcoin/
+@exec-add sh -c 'test -f /var/bitcoin/.bitcoin/bitcoin.conf || { echo rpcuser=$(dd if=/dev/random bs=12 count=1 2>/dev/null | b64encode - | tail -n 2 | head -n 1); echo rpcpassword=$(dd if=/dev/random bs=48 count=1 2>/dev/null | b64encode - | tail -n 2 | head -n 1); } > /var/bitcoin/.bitcoin/bitcoin.conf && chmod 400 /var/bitcoin/.bitcoin/bitcoin.conf && chown _bitcoin:_bitcoin /var/bitcoin/.bitcoin/bitcoin.conf'
